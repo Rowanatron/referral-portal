@@ -32,17 +32,16 @@ class CustomTable extends React.Component {
     } else {
       e.preventDefault();
       e.stopPropagation();
-      const { status, comment, meetingRoom, interviewer, date } = this.state;
-      if (status && comment) {
-        fetch("/update/candidate", {
+      let formData = JSON.stringify(this.state);
+        fetch("http://localhost:8087/candidates/candidate/"+this.state.selectedProfile[0]["id"]+"/status", {
           headers: {
-            "content-type": "application/json"
+            "Content-Type": "application/json"
           },
-          method: "POST",
-          body: JSON.stringify({ status, comment, ...(status === "scheduled" ? {meetingRoom,interviewer,date} : {}) })
+          method: "PUT",
+          body: formData
         });
       }
-    }
+
     this.setState({ validated: true });
   };
 

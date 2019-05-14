@@ -26,8 +26,6 @@ class AddProfile extends React.Component {
   }
 
   addProfile = e => {
-    console.log("Validating and submitting forms");
-    console.log(e);
     const form = e.currentTarget;
     console.log(form.checkValidity());
     if (form.checkValidity() === false) {
@@ -36,14 +34,12 @@ class AddProfile extends React.Component {
     } else {
       e.preventDefault();
       e.stopPropagation();
-      //const formData = JSON.stringify(new JSONFormData(e.currentTarget).formData);
       let formData = JSON.stringify(this.state);
      //// Object.keys(this.state).forEach(key =>
       //  formData.push(key, this.state[key])
       //);
     //  formData.append("file", this.state.file);
     //  formData = JSON.stringify(formData);
-      console.log(formData);
       fetch("http://localhost:8087/candidates/", {
         headers: {
            "Content-Type": "application/json"
