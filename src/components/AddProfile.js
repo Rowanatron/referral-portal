@@ -11,7 +11,7 @@ class AddProfile extends React.Component {
     name: "",
     email: "",
     phone: "",
-    isReferred: false,
+    referred: false,
     referredBy: "",
     inNL: true,
     skillSet: "",
@@ -26,24 +26,31 @@ class AddProfile extends React.Component {
   }
 
   addProfile = e => {
+    console.log("Validating and submitting forms");
+    console.log(e);
     const form = e.currentTarget;
+    console.log(form.checkValidity());
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
     } else {
       e.preventDefault();
       e.stopPropagation();
-      const formData = new FormData();
-      Object.keys(this.state).forEach(key =>
-        formData.append(key, this.state[key])
-      );
-      formData.append("file", this.state.file);
-      fetch("/candidate", {
+      //const formData = JSON.stringify(new JSONFormData(e.currentTarget).formData);
+      let formData = JSON.stringify(this.state);
+     //// Object.keys(this.state).forEach(key =>
+      //  formData.push(key, this.state[key])
+      //);
+    //  formData.append("file", this.state.file);
+    //  formData = JSON.stringify(formData);
+      console.log(formData);
+      fetch("http://localhost:8087/candidates/", {
         headers: {
-          "content-type": "multipart/form-data"
+           "Content-Type": "application/json"
         },
         method: "POST",
-        body: formData
+        body: formData,
+
       });
     }
     this.setState({ validated: true });
@@ -129,12 +136,12 @@ class AddProfile extends React.Component {
                           as="select"
                           required
                           onChange={e =>
-                            this.setState({ skillSet: e.target.value })
+                            this.setState({ skill: e.target.value })
                           }
                         >
                           <option/>
                           {this.props.skillSets.map(skill => (
-                            <option value={skill.key}>{skill.value}</option>
+                            <option value={skill}>{skill}</option>
                           ))}
                         </Form.Control>
                       </Col>
@@ -165,22 +172,22 @@ class AddProfile extends React.Component {
                       </Col>
                     </Form.Group>
                   </Col>
-                  <Col xs="12" md="4">
-                    <Form.Group controlId="profilePhone" as={Row}>
-                      <Form.Label column sm="8" md="12">
-                        Upload Resume
-                      </Form.Label>
-                      <Col sm="10">
-                        <Form.Control
-                          required
-                          type="file"
-                          onChange={e => {
-                            this.setState({ file: e.target.files[0] });
-                          }}
-                        />
-                      </Col>
-                    </Form.Group>
-                  </Col>
+                 {/*<Col xs="12" md="4">*/}
+                 {/*   <Form.Group controlId="profilePhone" as={Row}>*/}
+                 {/*     <Form.Label column sm="8" md="12">*/}
+                 {/*       Upload Resume*/}
+                 {/*     </Form.Label>*/}
+                 {/*     <Col sm="10">*/}
+                 {/*       <Form.Control*/}
+                 {/*         //required*/}
+                 {/*         type="file"*/}
+                 {/*         onChange={e => {*/}
+                 {/*           this.setState({ file: e.target.files[0] });*/}
+                 {/*         }}*/}
+                 {/*       />*/}
+                 {/*     </Col>*/}
+                 {/*   </Form.Group>*/}
+                 {/* </Col>*/}
                 </Row>
                 <h5>Referral Info</h5>
                 <hr />
@@ -197,7 +204,7 @@ class AddProfile extends React.Component {
                           label="Yes"
                           type="radio"
                           name={`isReferral`}
-                          onChange={e => this.setState({ isReferred: true })}
+                          onChange={e => this.setState({ referred: true })}
                         />
                         <Form.Check
                           inline
@@ -205,7 +212,7 @@ class AddProfile extends React.Component {
                           label="No"
                           type="radio"
                           name={`isReferral`}
-                          onChange={e => this.setState({ isReferred: false })}
+                          onChange={e => this.setState({ referred: false })}
                         />
                       </Col>
                     </Form.Group>
@@ -249,7 +256,7 @@ class AddProfile extends React.Component {
                         >
                           <option/>
                           {this.props.statusList.map(status => (
-                            <option value={status.key}>{status.value}</option>
+                            <option value={status}>{status}</option>
                           ))}
                         </Form.Control>
                       </Col>
@@ -265,7 +272,7 @@ class AddProfile extends React.Component {
                         as="textarea"
                         rows="3"
                         onChange={e =>
-                          this.setState({ comment: e.target.value })
+                          this.setState({ comments: e.target.value })
                         }
                       />
                     </Form.Group>

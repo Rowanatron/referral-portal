@@ -10,7 +10,7 @@ const getSkillSetList = store => next => async action => {
   const dispatch = store.dispatch;
 
   try {
-    const data = await fetch("api/skillSetList.json")
+    const data = await fetch("http://localhost:8087/candidates/skills")
       .then(data => data.json())
       .then(response => {
         return response;
